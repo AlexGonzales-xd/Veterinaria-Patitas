@@ -1,32 +1,34 @@
-import ConsultaCard from "../components/ConsultaCard.jsx";
-import { obtenerConsulta } from "../service/ConsultaService.jsx";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { listarCitas, eliminarCita } from "../service/ConsultaService";
 
-function ConsultaPage() {
+export default function ConsultaPage() {
+  const [citas, setCitas] = useState([]);
+  const [error, setError] = useState(null);
 
-    const [consultas, setConsultas] = useState([]);
+  const cargar = () =>
+    listarCitas().then(setCitas).catch((e) => setError(e.message));
 
-    useEffect(() => {
-        obtenerConsulta()
-            .then((data) => setConsultas(data))
-            .catch((error) => console.error("Error:", error));
-    }, []);
+  useEffect(() => { cargar(); }, []);
 
-    return (
-        <div>
-            <h1>Vet</h1>
-            <h2>Consultas</h2>
+  const handleEliminar = async (id) => {
+    if (!confirm("¿Eliminar esta cita?")) return;
+    await eliminarCita(id);
+    cargar();
+  };
 
-            <div className="consultas">
-                {consultas.map((consulta) => (
-                    <ConsultaCard
-                        key={consulta.id}
-                        consulta={consulta}
-                    />
-                ))}
-            </div>
+  if (error) return <p>Error: {error}</p>;
+
+  return (
+    <div>
+      <Link to="/consultas/nueva">Nueva consulta</Link>
+      {citas.map((c) => (
+        <div key={c.id}>
+          <span>{c.fecha}</span>
+          <Link to={`/consultas/editar/${c.id}`}>Editar</Link>
+          <button onClick={() => handleEliminar(c.id)}>Eliminar</button>
         </div>
-    );
+      ))}
+    </div>
+  );
 }
-
-export default ConsultaPage;

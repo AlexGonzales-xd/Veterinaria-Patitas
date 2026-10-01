@@ -1,12 +1,60 @@
-const API_URL = "http://localhost:8080/api/consulta";
+import { serviceFetch } from './ClientService';
 
-export function obtenerConsulta() {
-    return fetch(API_URL)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Error al obtener consultas");
-            }
+// LISTAR
+export function listarCitas() {
+    return serviceFetch('/consultas');
+}
 
-            return response.json();
-        });
+// LISTAR POR VETERINARIO
+export function listarCitasPorVeterinario(idVeterinario) {
+    return serviceFetch(`/consultas/veterinario/${idVeterinario}`);
+}
+
+// LISTAR POR MASCOTA
+export function listarCitasPorMascota(idMascota) {
+    return serviceFetch(`/consultas/mascota/${idMascota}`);
+}
+
+// CREAR
+export function agendarCita({
+    fecha,
+    idApoderado,
+    idVeterinario,
+    idMascota
+}) {
+    const params = new URLSearchParams({
+        fecha,
+        idApoderado,
+        idVeterinario,
+        idMascota
+    });
+
+    return serviceFetch(`/consultas/rapida?${params.toString()}`, {
+        method: 'POST'
+    });
+}
+
+// EDITAR
+export function editarCita(id, {
+    fecha,
+    idApoderado,
+    idVeterinario,
+    idMascota
+}) {
+    return serviceFetch(`/consultas/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            fecha,
+            idApoderado,
+            idVeterinario,
+            idMascota
+        })
+    });
+}
+
+// ELIMINAR
+export function eliminarCita(id) {
+    return serviceFetch(`/consultas/${id}`, {
+        method: 'DELETE'
+    });
 }
