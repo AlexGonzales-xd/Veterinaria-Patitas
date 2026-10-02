@@ -4,13 +4,7 @@ export function listarMascotas() {
     return serviceFetch('/mascotas');
 }
 
-export function crearMascota({
-    nombre,
-    raza,
-    peso,
-    genero,
-    idApoderado,
-}) {
+export function crearMascota({ nombre, raza, peso, genero, idApoderado }) {
     return serviceFetch('/mascotas', {
         method: 'POST',
         body: JSON.stringify({
@@ -18,9 +12,7 @@ export function crearMascota({
             raza,
             peso,
             genero,
-            apoderado: {
-                id: idApoderado,
-            },
+            apoderado: { id: idApoderado },
         }),
     });
 }

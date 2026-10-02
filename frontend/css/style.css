@@ -41,3 +41,16 @@ body { background-color: var(--bg); color: var(--text); }
 .data-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
 .data-table th, .data-table td { border: 1px solid #ddd; padding: 1rem; text-align: left; }
 .data-table th { background-color: #f8f9fa; }
+.navbar {
+  display: flex;
+  gap: 1.5rem;
+  padding: 14px 24px;
+  background: #1f2937;
+}
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+}
+.navbar a:hover {
+  text-decoration: underline;
+}
