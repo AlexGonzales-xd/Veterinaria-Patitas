@@ -1,41 +1,51 @@
-import { serviceFetch } from './ClientService';
+const API = import.meta.env.VITE_API_URL;
+const KEY = "vet_user";
 
-export async function login(username, password) {
-    const data = await serviceFetch('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ username, password }),
-    });
+async function post(path, body) {
+    let res;
+    try {
+        res = await fetch(`${API}/api/auth/${path}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
+    } catch {
+        throw new Error("No se pudo conectar con el servidor. Verifica que el backend este encendido.");
+    }
 
-    // Ajusta "token" al nombre real que devuelva tu backend
-    if (data?.token) localStorage.setItem('token', data.token);
-    localStorage.setItem('usuario', JSON.stringify(data?.usuario ?? data ?? {}));
-    // Si tu backend no usa token, esto sirve igual como "sesión iniciada"
-    localStorage.setItem('sesion', 'true');
+    let data = null;
+    try {
+        data = await res.json();
+    } catch {
+        /* respuesta sin JSON */
+    }
 
+    if (!res.ok) {
+        throw new Error(data?.error || data?.message || "Datos invalidos o error del servidor.");
+    }
     return data;
 }
 
-export function register(username, email, password, id_rol = 4) {
-    return serviceFetch('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({ username, email, password, id_rol }),
-    });
+// POST /api/auth/login -> { idUsuario, username, email, rol }
+export async function login(username, password) {
+    const user = await post("login", { username, password });
+    localStorage.setItem(KEY, JSON.stringify(user));
+    return user;
+}
+
+// POST /api/auth/register -> crea el usuario con rol 4 (apoderado)
+export function register(username, email, password) {
+    return post("register", { username, email, password });
 }
 
 export function logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('sesion');
+    localStorage.removeItem(KEY);
 }
 
-export function estaAutenticado() {
-    return localStorage.getItem('sesion') === 'true';
-}
-
-export function usuarioActual() {
+export function getSession() {
     try {
-        return JSON.parse(localStorage.getItem('usuario') || '{}');
+        return JSON.parse(localStorage.getItem(KEY));
     } catch {
-        return {};
+        return null;
     }
 }

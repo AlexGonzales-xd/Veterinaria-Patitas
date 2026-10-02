@@ -1,5 +1,5 @@
-const API_MASCOTAS = 'http://localhost:8080/api/mascotas';
-const API_APODERADOS = 'http://localhost:8080/api/apoderados';
+const API_MASCOTAS = import.meta.env.VITE_API_URL;
+const API_APODERADOS = import.meta.env.VITE_API_URL;
 
 document.addEventListener('DOMContentLoaded', () => {
     cargarMascotas();
