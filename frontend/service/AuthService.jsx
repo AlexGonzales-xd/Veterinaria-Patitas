@@ -49,3 +49,7 @@ export function getSession() {
         return null;
     }
 }
+
+export function estaAutenticado() {
+    return Boolean(getSession());
+}

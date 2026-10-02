@@ -1,5 +1,5 @@
 // js/auth.js -> cargar con: <script type="module" src="js/auth.js"></script>
-const API_URL = import.meta.env.VITE_API_URL; // https://.../api
+const API_URL = import.meta.env.VITE_API_URL;
 
 const loginWrapper = document.getElementById('login-form-wrapper');
 const registerWrapper = document.getElementById('register-form-wrapper');
