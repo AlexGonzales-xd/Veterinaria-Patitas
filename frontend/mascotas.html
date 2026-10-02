@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Veterinaria - Dashboard</title>
+    <title>Veterinaria - Mascotas</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -10,32 +10,69 @@
         <aside class="sidebar">
             <div class="brand"><h2>🐾 Patitas</h2></div>
             <nav class="nav-menu">
-                <a href="home.html" class="nav-item active">🏠 Inicio</a>
-                <a href="mascotas.html" class="nav-item">🐶 Mascotas</a>
-                <!-- Agrega aquí los enlaces para Consultas, Veterinarios, etc. -->
+                <a href="home.html" class="nav-item">🏠 Inicio</a>
+                <a href="mascotas.html" class="nav-item active">🐶 Mascotas</a>
             </nav>
             <button id="btn-logout" class="btn btn-logout">Cerrar Sesión</button>
         </aside>
+        
         <main class="main-content">
-            <header class="topbar"><h1 id="saludo">Bienvenido al Sistema</h1></header>
+            <header class="topbar"><h1>Gestión de Mascotas</h1></header>
+            
             <section class="card">
-                <h2>Estado del Sistema</h2>
-                <p>Selecciona una opción en el menú lateral para gestionar la clínica.</p>
+                <h2>Registrar Mascota</h2>
+                <form id="form-mascota" class="grid-form">
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" id="mascota-nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Raza:</label>
+                        <input type="text" id="mascota-raza" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Peso (kg):</label>
+                        <input type="number" step="0.1" id="mascota-peso" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Género:</label>
+                        <select id="mascota-genero" required>
+                            <option value="Macho">Macho</option>
+                            <option value="Hembra">Hembra</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Apoderado (dueño):</label>
+                        <select id="mascota-apoderado" required>
+                            <option value="">Cargando...</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Guardar en Base de Datos</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="card mt-2">
+                <h2>Mascotas en Base de Datos</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Nombre</th><th>Raza</th><th>Peso</th><th>Género</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mascotas-table-body">
+                        <tr><td colspan="6" style="text-align:center;">Cargando datos...</td></tr>
+                    </tbody>
+                </table>
             </section>
         </main>
     </div>
-
-    <script type="module">
-        import { requireAuth, getUser, logout } from './js/auth.js';
-
-        requireAuth(); // si no hay token, redirige a index.html
-
-        const user = getUser();
-        if (user?.name) {
-            document.getElementById('saludo').textContent = `Bienvenido, ${user.name}`;
-        }
-
-        document.getElementById('btn-logout').addEventListener('click', logout);
+    <script src="js/mascotas.js"></script>
+    <script>
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            localStorage.clear(); window.location.href = 'index.html';
+        });
     </script>
 </body>
 </html>

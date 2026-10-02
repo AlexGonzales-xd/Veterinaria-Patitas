@@ -7,7 +7,7 @@ import ConsultaPage from "./pages/ConsultaPage";
 import NuevaConsultaPage from "./pages/NuevaConsultaPage";
 import EditarConsultaPage from "./pages/EditarConsultaPage";
 import MascotasPage from "./pages/MascotasPage";
-import ApoderadosPage from "./pages/ApoderadosPage";
+import ApoderadosPage from "./pages/ApoderadoPage";
 import VeterinariosPage from "./pages/VeterinariosPage";
 
 function RutaProtegida({ children }) {
