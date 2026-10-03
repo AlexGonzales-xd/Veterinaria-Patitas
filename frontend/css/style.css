@@ -1,26 +1,112 @@
-:root { --primary: #4a90e2; --azul-oscuro: #2c3e50; }
+:root {
+  --bg: #fdf6ee;
+  --text: #241f1a;
+  --text-soft: #8c8780;
+  --border: #ebe0d1;
+  --green: #29a14a;
+  --blue: #4d5ede;
+  --orange: #ed991a;
+  --red: #cc3838;
+  --th-bg: #f6deb5;
+  --th-text: #805926;
+  --row-alt: #fcf7f0;
+  --radius: 12px;
+}
+
 * { box-sizing: border-box; }
-body { margin: 0; font-family: Arial, sans-serif; color: #2c3e50; background: #f4f7fb; }
-.container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-button, input, select { font: inherit; padding: 9px 12px; border: 1px solid #b7c9dd; border-radius: 4px; }
-button { cursor: pointer; background: white; color: #245b99; }
-button:hover, button[aria-pressed="true"] { background: #2869b2; color: white; }
-button:disabled { opacity: .6; cursor: wait; }
-section { padding: 20px; background: white; border: 1px solid #d7e2ef; border-radius: 6px; }
-h2 { margin-top: 0; }
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Inter, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.container { max-width: 1100px; margin: 30px auto; padding: 0 20px 60px; }
+
+/* ---------- Encabezado ---------- */
+.encabezado {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  margin-bottom: 16px;
+}
+.encabezado h1 { color: var(--text); margin: 0 0 4px; font-size: 1.4rem; }
+.encabezado p { margin: 0; color: var(--text-soft); font-size: .9rem; }
+
+/* ---------- Navegacion ---------- */
+nav[aria-label="Secciones"] {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+nav[aria-label="Secciones"] button {
+  background: #ffffff; color: var(--text-soft);
+  border: 1px solid var(--border); border-radius: 17px;
+  padding: 9px 18px; font-weight: 600; font-size: .9rem;
+}
+nav[aria-label="Secciones"] button:hover { border-color: var(--blue); color: var(--blue); }
+nav[aria-label="Secciones"] button[aria-pressed="true"] {
+  background: var(--blue); color: #fff; border-color: var(--blue);
+}
+
+/* ---------- Botones generales ---------- */
+button, input, select {
+  font: inherit;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+button { cursor: pointer; background: #ffffff; color: var(--text); font-weight: 600; }
+button:hover { filter: brightness(0.97); }
+button:disabled { opacity: .55; cursor: wait; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+/* Acciones con significado: agregar / editar / eliminar / logout */
+.btn-agregar, .btn-guardar { background: var(--green); color: #fff; border-color: var(--green); }
+.btn-editar { background: var(--orange); color: #fff; border-color: var(--orange); }
+.btn-eliminar, .btn-logout { background: var(--red); color: #fff; border-color: var(--red); }
+.btn-secundario { background: #ffffff; color: var(--text-soft); }
+
+.encabezado button { background: var(--red); color: #fff; border-color: var(--red); }
+
+/* ---------- Secciones / tarjetas ---------- */
+section {
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+section + section { margin-top: 18px; }
+h2 { margin-top: 0; color: var(--text); }
+h3 { color: var(--text); }
+
+.acciones-barra { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+
+/* ---------- Tabla ---------- */
 .table-scroll { overflow-x: auto; margin-top: 16px; }
 table { width: 100%; border-collapse: collapse; text-align: left; }
-th, td { padding: 12px; border-bottom: 1px solid #d7e2ef; }
-th { background: #eaf2fc; }
-.error { padding: 12px; background: #fff0ef; color: #992d24; }
-form { max-width: 500px; padding: 16px 0; }
-label { display: block; margin-bottom: 12px; }
-input, select { display: block; width: 100%; margin-top: 6px; }
-:focus-visible { outline: 3px solid #2779bd; outline-offset: 2px; }
+th, td { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+th { background: var(--th-bg); color: var(--th-text); font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; }
+tbody tr:nth-child(even) { background: var(--row-alt); }
+tbody tr:hover { background: #f6ecd9; }
+td button { margin-right: 6px; padding: 7px 12px; font-size: .82rem; border-radius: 8px; }
 
-.encabezado { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.encabezado h1 { color: var(--azul-oscuro); margin-bottom: 8px; }
-nav { padding: 12px; background: var(--azul-oscuro); border-radius: 6px; }
-nav button { background: transparent; color: white; border-color: #7996b3; }
-nav button:hover, nav button[aria-pressed="true"] { background: var(--primary); color: #102d50; border-color: var(--primary); }
+.error { padding: 12px; background: #fde8e8; color: var(--red); border-radius: 10px; }
+
+/* ---------- Formularios (Agregar / Editar) ---------- */
+.form-card {
+  border: 1px dashed var(--blue);
+  background: #f7f8ff;
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+form { max-width: 500px; padding: 0; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+label { display: block; margin-bottom: 12px; font-weight: 600; font-size: .88rem; color: var(--text); }
+input, select { display: block; width: 100%; margin-top: 6px; background: #fff; }
+.form-acciones { display: flex; gap: 10px; margin-top: 4px; }
+
