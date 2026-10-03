@@ -24,7 +24,7 @@ public class Mascota {
     @Column(name = "genero", length = 40, nullable = false)
     private String genero;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_apoderado", nullable = false)
     private Apoderado apoderado;
 

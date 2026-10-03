@@ -15,15 +15,15 @@ public class Consulta {
     @Column(name = "fecha_con", nullable = false)
     private LocalDateTime fechaCon;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_apoderado", nullable = false)
     private Apoderado apoderado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_veterinario", nullable = false)
     private Veterinario veterinario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_mascota", nullable = false)
     private Mascota mascota;
 
