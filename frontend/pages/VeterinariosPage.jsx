@@ -1,22 +1,34 @@
 import { useEffect, useState } from "react";
-import Nabar from "../components/Nabar";
 import { listarVeterinarios } from "../service/VeterinarioService";
 
 export default function VeterinariosPage() {
   const [veterinarios, setVeterinarios] = useState([]);
   const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(true);
 
-  useEffect(() => {
-    listarVeterinarios().then(setVeterinarios).catch((e) => setError(e.message));
-  }, []);
+  async function cargar() {
+    setCargando(true);
+    setError("");
+    try {
+      setVeterinarios(await listarVeterinarios());
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setCargando(false);
+    }
+  }
+
+  useEffect(() => { cargar(); }, []);
 
   return (
     <>
-      <Nabar />
-      <main className="container">
-        <h1>Veterinarios</h1>
-        {error && <p className="error">{error}</p>}
-        <table>
+      <section>
+        <h2>Veterinarios</h2>
+        <button onClick={cargar} disabled={cargando}>Actualizar lista</button>
+        {cargando && <p role="status">Cargando...</p>}
+        {error && <p className="error" role="alert">{error}</p>}
+        {!cargando && !error && veterinarios.length === 0 && <p>No hay registros.</p>}
+        <div className="table-scroll"><table>
           <thead>
             <tr>
               <th>ID</th>
@@ -35,8 +47,8 @@ export default function VeterinariosPage() {
               </tr>
             ))}
           </tbody>
-        </table>
-      </main>
+        </table></div>
+      </section>
     </>
   );
 }

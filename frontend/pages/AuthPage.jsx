@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { login, register } from "../service/AuthService";
-import "../css/auth.css";
+import "../css/Auth.css";
 
-export default function AuthPage() {
-  const navigate = useNavigate();
+export default function AuthPage({ onLogin }) {
 
   const [mode, setMode] = useState("login"); // "login" | "register"
   const [form, setForm] = useState({ username: "", email: "", password: "", confirm: "" });
@@ -45,11 +43,8 @@ export default function AuthPage() {
       if (isRegister) {
         await register(form.username.trim(), form.email.trim(), form.password);
       }
-      // Autentica e inicia sesión persistiendo en localStorage
-      await login(form.username.trim(), form.password);
-      
-      // Redirige directamente a la raíz de la aplicación protegida
-      navigate("/", { replace: true });
+      const usuario = await login(form.username.trim(), form.password);
+      onLogin(usuario);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -120,7 +115,7 @@ export default function AuthPage() {
 
         <p className="auth-switch">
           {isRegister ? "¿Ya tienes cuenta?" : "¿No tienes cuenta?"}{" "}
-          <button type="button" className="auth-link" onClick={switchMode}>
+          <button type="button" className="auth-link" onClick={switchMode} disabled={loading}>
             {isRegister ? "Inicia sesión" : "Regístrate"}
           </button>
         </p>

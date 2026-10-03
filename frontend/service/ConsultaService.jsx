@@ -44,10 +44,10 @@ export function editarCita(id, {
     return serviceFetch(`/consultas/${id}`, {
         method: 'PUT',
         body: JSON.stringify({
-            fecha,
-            idApoderado,
-            idVeterinario,
-            idMascota
+            fechaCon: fecha,
+            apoderado: { id: Number(idApoderado) },
+            veterinario: { id: Number(idVeterinario) },
+            mascota: { id: Number(idMascota) }
         })
     });
 }

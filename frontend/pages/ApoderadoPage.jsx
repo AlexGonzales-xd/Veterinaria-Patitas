@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
-import Nabar from "../components/Nabar";
 import { listarApoderados, eliminarApoderado } from "../service/ApoderadoService";
 
 export default function ApoderadosPage() {
   const [apoderados, setApoderados] = useState([]);
   const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(true);
 
-  const cargar = () =>
-    listarApoderados().then(setApoderados).catch((e) => setError(e.message));
+  async function cargar() {
+    setCargando(true);
+    setError("");
+    try {
+      setApoderados(await listarApoderados());
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setCargando(false);
+    }
+  }
 
-  useEffect(() => {
-    cargar();
-  }, []);
+  useEffect(() => { cargar(); }, []);
 
   const eliminar = async (id) => {
     if (!confirm("¿Eliminar este apoderado?")) return;
@@ -25,11 +32,13 @@ export default function ApoderadosPage() {
 
   return (
     <>
-      <Nabar />
-      <main className="container">
-        <h1>Apoderados</h1>
-        {error && <p className="error">{error}</p>}
-        <table>
+      <section>
+        <h2>Apoderados</h2>
+        <button onClick={cargar} disabled={cargando}>Actualizar lista</button>
+        {cargando && <p role="status">Cargando...</p>}
+        {error && <p className="error" role="alert">{error}</p>}
+        {!cargando && !error && apoderados.length === 0 && <p>No hay registros.</p>}
+        <div className="table-scroll"><table>
           <thead>
             <tr>
               <th>ID</th>
@@ -50,8 +59,8 @@ export default function ApoderadosPage() {
               </tr>
             ))}
           </tbody>
-        </table>
-      </main>
+        </table></div>
+      </section>
     </>
   );
 }

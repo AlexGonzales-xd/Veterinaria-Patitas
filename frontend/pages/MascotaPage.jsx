@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
-import Nabar from "../components/Nabar";
 import { listarMascotas, eliminarMascota } from "../service/MascotaService";
 
 export default function MascotasPage() {
   const [mascotas, setMascotas] = useState([]);
   const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(true);
 
-  const cargar = () =>
-    listarMascotas().then(setMascotas).catch((e) => setError(e.message));
+  async function cargar() {
+    setCargando(true);
+    setError("");
+    try {
+      setMascotas(await listarMascotas());
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setCargando(false);
+    }
+  }
 
-  useEffect(() => {
-    cargar();
-  }, []);
+  useEffect(() => { cargar(); }, []);
 
   const eliminar = async (id) => {
     if (!confirm("¿Eliminar esta mascota?")) return;
@@ -25,11 +32,13 @@ export default function MascotasPage() {
 
   return (
     <>
-      <Nabar />
-      <main className="container">
-        <h1>Mascotas</h1>
-        {error && <p className="error">{error}</p>}
-        <table>
+      <section>
+        <h2>Mascotas</h2>
+        <button onClick={cargar} disabled={cargando}>Actualizar lista</button>
+        {cargando && <p role="status">Cargando...</p>}
+        {error && <p className="error" role="alert">{error}</p>}
+        {!cargando && !error && mascotas.length === 0 && <p>No hay registros.</p>}
+        <div className="table-scroll"><table>
           <thead>
             <tr>
               <th>Nombre</th>
@@ -54,8 +63,8 @@ export default function MascotasPage() {
               </tr>
             ))}
           </tbody>
-        </table>
-      </main>
+        </table></div>
+      </section>
     </>
   );
 }

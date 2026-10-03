@@ -1,29 +1,11 @@
-const API = import.meta.env.VITE_API_URL;
+import { serviceFetch } from "./ClientService";
 const KEY = "vet_user";
 
-async function post(path, body) {
-    let res;
-    try {
-        res = await fetch(`${API}/api/auth/${path}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-        });
-    } catch {
-        throw new Error("No se pudo conectar con el servidor. Verifica que el backend este encendido.");
-    }
-
-    let data = null;
-    try {
-        data = await res.json();
-    } catch {
-        /* respuesta sin JSON */
-    }
-
-    if (!res.ok) {
-        throw new Error(data?.error || data?.message || "Datos invalidos o error del servidor.");
-    }
-    return data;
+function post(path, body) {
+    return serviceFetch(`/auth/${path}`, {
+        method: "POST",
+        body: JSON.stringify(body),
+    });
 }
 
 // POST /api/auth/login -> { idUsuario, username, email, rol }
