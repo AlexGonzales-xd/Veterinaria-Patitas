@@ -33,6 +33,17 @@ public class MascotaService {
         return mascotaRepository.save(mascota);
     }
 
+    public Optional<Mascota> actualizar(Long id, Mascota datos) {
+        return mascotaRepository.findById(id).map(existente -> {
+            existente.setNombre(datos.getNombre());
+            existente.setRaza(datos.getRaza());
+            existente.setPeso(datos.getPeso());
+            existente.setGenero(datos.getGenero());
+            existente.setApoderado(datos.getApoderado());
+            return mascotaRepository.save(existente);
+        });
+    }
+
     public void eliminar(Long id) {
         mascotaRepository.deleteById(id);
     }

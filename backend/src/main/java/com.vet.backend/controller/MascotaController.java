@@ -36,6 +36,13 @@ public class MascotaController {
         return mascotaService.guardar(mascota);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Mascota> actualizar(@PathVariable Long id, @RequestBody Mascota mascota) {
+        return mascotaService.actualizar(id, mascota)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         mascotaService.eliminar(id);

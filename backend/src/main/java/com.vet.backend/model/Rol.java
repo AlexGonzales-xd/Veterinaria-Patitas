@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "rol", schema = "a_veterinaria")
-public class Rol {
+public class    Rol {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // SERIAL en PostgreSQL

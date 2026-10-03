@@ -15,6 +15,13 @@ export function crearApoderado({ nombre, telefono }) {
     });
 }
 
+export function actualizarApoderado(id, { nombre, telefono }) {
+    return serviceFetch(`/apoderados/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ nombre, telefono }),
+    });
+}
+
 export function eliminarApoderado(id) {
     return serviceFetch(`/apoderados/${id}`, {
         method: 'DELETE',

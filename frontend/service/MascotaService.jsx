@@ -17,6 +17,19 @@ export function crearMascota({ nombre, raza, peso, genero, idApoderado }) {
     });
 }
 
+export function actualizarMascota(id, { nombre, raza, peso, genero, idApoderado }) {
+    return serviceFetch(`/mascotas/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            nombre,
+            raza,
+            peso,
+            genero,
+            apoderado: { id: idApoderado },
+        }),
+    });
+}
+
 export function eliminarMascota(id) {
     return serviceFetch(`/mascotas/${id}`, {
         method: 'DELETE',

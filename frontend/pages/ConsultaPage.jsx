@@ -35,15 +35,19 @@ export default function ConsultaPage() {
   return (
     <section>
       <h2>Consultas</h2>
-      <button onClick={cargar} disabled={cargando}>Actualizar lista</button>{" "}
-      <button onClick={() => setFormulario({})}>Nueva consulta</button>
+      <div className="acciones-barra">
+        <button onClick={cargar} disabled={cargando}>Actualizar lista</button>
+        <button className="btn-agregar" onClick={() => setFormulario({})}>+ Nueva consulta</button>
+      </div>
       {formulario && (
-        <NuevaConsultaPage
-          key={formulario.id ?? "nueva"}
-          consulta={formulario}
-          onCancelar={() => setFormulario(null)}
-          onGuardar={() => { setFormulario(null); cargar(); }}
-        />
+        <div className="form-card">
+          <NuevaConsultaPage
+            key={formulario.id ?? "nueva"}
+            consulta={formulario}
+            onCancelar={() => setFormulario(null)}
+            onGuardar={() => { setFormulario(null); cargar(); }}
+          />
+        </div>
       )}
       {cargando && <p role="status">Cargando...</p>}
       {error && <p className="error" role="alert">{error}</p>}
@@ -60,8 +64,8 @@ export default function ConsultaPage() {
                 <td>{c.apoderado?.nombre}</td>
                 <td>{c.veterinario?.nombre}</td>
                 <td>
-                  <button onClick={() => setFormulario(c)}>Editar</button>{" "}
-                  <button onClick={() => eliminar(c.id)}>Eliminar</button>
+                  <button className="btn-editar" onClick={() => setFormulario(c)}>Editar</button>
+                  <button className="btn-eliminar" onClick={() => eliminar(c.id)}>Eliminar</button>
                 </td>
               </tr>
             ))}

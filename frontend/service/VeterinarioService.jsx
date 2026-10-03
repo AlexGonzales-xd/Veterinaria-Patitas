@@ -18,3 +18,16 @@ export function crearVeterinario({
         }),
     });
 }
+
+export function actualizarVeterinario(id, { nombre, especialidad, telefono }) {
+    return serviceFetch(`/veterinarios/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ nombre, especialidad, telefono }),
+    });
+}
+
+export function eliminarVeterinario(id) {
+    return serviceFetch(`/veterinarios/${id}`, {
+        method: 'DELETE',
+    });
+}
