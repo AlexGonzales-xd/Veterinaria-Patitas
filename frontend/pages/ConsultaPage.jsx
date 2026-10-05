@@ -33,12 +33,18 @@ export default function ConsultaPage() {
   }
 
   return (
-    <section>
-      <h2>Consultas</h2>
-      <div className="acciones-barra">
-        <button onClick={cargar} disabled={cargando}>Actualizar lista</button>
-        <button className="btn-agregar" onClick={() => setFormulario({})}>+ Nueva consulta</button>
-      </div>
+    <>
+      <header className="page-header">
+        <div>
+          <h1>Consultas</h1>
+          <p>Historial completo de citas registradas</p>
+        </div>
+        <div className="page-header-actions">
+          <button className="btn-secondary" onClick={cargar} disabled={cargando}>Actualizar</button>
+          <button className="btn-primary" onClick={() => setFormulario({})}>+ Nueva consulta</button>
+        </div>
+      </header>
+
       {formulario && (
         <div className="form-card">
           <NuevaConsultaPage
@@ -49,29 +55,38 @@ export default function ConsultaPage() {
           />
         </div>
       )}
-      {cargando && <p role="status">Cargando...</p>}
-      {error && <p className="error" role="alert">{error}</p>}
-      {!cargando && !error && citas.length === 0 && <p>No hay consultas.</p>}
-      <div className="table-scroll">
-        <table>
-          <thead><tr><th>ID</th><th>Fecha</th><th>Mascota</th><th>Apoderado</th><th>Veterinario</th><th>Acciones</th></tr></thead>
-          <tbody>
-            {citas.map((c) => (
-              <tr key={c.id}>
-                <td>{c.id}</td>
-                <td>{c.fechaCon?.replace("T", " ")}</td>
-                <td>{c.mascota?.nombre}</td>
-                <td>{c.apoderado?.nombre}</td>
-                <td>{c.veterinario?.nombre}</td>
-                <td>
-                  <button className="btn-editar" onClick={() => setFormulario(c)}>Editar</button>
-                  <button className="btn-eliminar" onClick={() => eliminar(c.id)}>Eliminar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
+
+      <section className="card">
+        <div className="card-title">
+          <h2>Todas las consultas</h2>
+          <p>{citas.length} {citas.length === 1 ? "consulta registrada" : "consultas registradas"}</p>
+        </div>
+
+        {cargando && <p role="status">Cargando...</p>}
+        {error && <p className="error" role="alert">{error}</p>}
+        {!cargando && !error && citas.length === 0 && <p>No hay consultas.</p>}
+        <div className="table-scroll">
+          <table>
+            <thead><tr><th>Fecha</th><th>Mascota</th><th>Apoderado</th><th>Veterinario</th><th>Acciones</th></tr></thead>
+            <tbody>
+              {citas.map((c) => (
+                <tr key={c.id}>
+                  <td>{c.fechaCon?.replace("T", " ")}</td>
+                  <td>{c.mascota?.nombre}</td>
+                  <td>{c.apoderado?.nombre}</td>
+                  <td>{c.veterinario?.nombre}</td>
+                  <td>
+                    <div className="acciones-fila">
+                      <button className="link-editar" onClick={() => setFormulario(c)}>Editar</button>
+                      <button className="link-eliminar" onClick={() => eliminar(c.id)}>Eliminar</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </>
   );
 }

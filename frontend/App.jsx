@@ -7,6 +7,8 @@ import AuthPage from "./pages/AuthPage";
 import { getSession, logout } from "./service/AuthService";
 import "./css/style.css";
 
+const SECCIONES = ["Mascotas", "Apoderados", "Veterinarios", "Consultas"];
+
 export default function App() {
   const [usuario, setUsuario] = useState(getSession);
   const [seccion, setSeccion] = useState("Mascotas");
@@ -19,27 +21,51 @@ export default function App() {
 
   if (!usuario) return <AuthPage onLogin={setUsuario} />;
 
+  const inicial = (usuario.username || "?").charAt(0).toUpperCase();
+
   return (
-    <main className="container">
-      <header className="encabezado">
-        <div>
-          <h1>Veterinaria Patitas</h1>
-          <p>Bienvenido, {usuario.username}</p>
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="sidebar-logo">
+          <div className="mark">🐾</div>
+          <span className="wordmark">Patitas</span>
         </div>
-        <button onClick={cerrarSesion}>Cerrar sesión</button>
-      </header>
-      <p>Consulta los datos registrados en el backend.</p>
-      <nav aria-label="Secciones">
-        {["Mascotas", "Apoderados", "Veterinarios", "Consultas"].map((nombre) => (
-          <button key={nombre} onClick={() => setSeccion(nombre)} aria-pressed={seccion === nombre}>
-            {nombre}
-          </button>
-        ))}
-      </nav>
-      {seccion === "Mascotas" && <MascotasPage />}
-      {seccion === "Apoderados" && <ApoderadosPage />}
-      {seccion === "Veterinarios" && <VeterinariosPage />}
-      {seccion === "Consultas" && <ConsultaPage />}
-    </main>
+
+        <nav className="sidebar-nav" aria-label="Secciones">
+          {SECCIONES.map((nombre) => (
+            <button
+              key={nombre}
+              onClick={() => setSeccion(nombre)}
+              aria-pressed={seccion === nombre}
+            >
+              {nombre}
+            </button>
+          ))}
+        </nav>
+
+        <div className="sidebar-spacer" />
+
+        <button className="sidebar-logout" onClick={cerrarSesion}>Cerrar sesión</button>
+      </aside>
+
+      <div className="content-area">
+        <div className="content-topbar">
+          <div className="user-pill">
+            <div className="avatar">{inicial}</div>
+            <div className="datos">
+              <strong>{usuario.username}</strong>
+              <span>{usuario.rol || "Usuario"}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="content-body">
+          {seccion === "Mascotas" && <MascotasPage />}
+          {seccion === "Apoderados" && <ApoderadosPage />}
+          {seccion === "Veterinarios" && <VeterinariosPage />}
+          {seccion === "Consultas" && <ConsultaPage />}
+        </div>
+      </div>
+    </div>
   );
 }

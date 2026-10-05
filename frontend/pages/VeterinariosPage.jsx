@@ -70,68 +70,80 @@ export default function VeterinariosPage() {
   };
 
   return (
-    <section>
-      <h2>Veterinarios</h2>
-      <div className="acciones-barra">
-        <button onClick={cargar} disabled={cargando}>Actualizar lista</button>
-        <button className="btn-agregar" onClick={abrirAgregar}>+ Agregar veterinario</button>
-      </div>
-
-      {formulario && (
-        <div className="form-card">
-          <h3>{formulario.id ? "Editar veterinario" : "Nuevo veterinario"}</h3>
-          <form onSubmit={guardar}>
-            <div className="form-grid">
-              <label>Nombre
-                <input name="nombre" value={form.nombre} onChange={cambiar} required />
-              </label>
-              <label>Especialidad
-                <input name="especialidad" value={form.especialidad} onChange={cambiar} required />
-              </label>
-              <label>Teléfono
-                <input name="telefono" value={form.telefono} onChange={cambiar} maxLength={11} required />
-              </label>
-            </div>
-            <div className="form-acciones">
-              <button type="submit" className="btn-guardar" disabled={guardando}>
-                {guardando ? "Guardando..." : "Guardar"}
-              </button>
-              <button type="button" className="btn-secundario" onClick={() => setFormulario(null)} disabled={guardando}>
-                Cancelar
-              </button>
-            </div>
-          </form>
+    <>
+      <header className="page-header">
+        <div>
+          <h1>Veterinarios</h1>
+          <p>Gestiona al personal veterinario de la clínica</p>
         </div>
-      )}
+        <div className="page-header-actions">
+          <button className="btn-secondary" onClick={cargar} disabled={cargando}>Actualizar</button>
+          <button className="btn-primary" onClick={abrirAgregar}>+ Nuevo veterinario</button>
+        </div>
+      </header>
 
-      {cargando && <p role="status">Cargando...</p>}
-      {error && <p className="error" role="alert">{error}</p>}
-      {!cargando && !error && veterinarios.length === 0 && <p>No hay registros.</p>}
-      <div className="table-scroll"><table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Especialidad</th>
-            <th>Teléfono</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {veterinarios.map((v) => (
-            <tr key={v.id}>
-              <td>{v.id}</td>
-              <td>{v.nombre}</td>
-              <td>{v.especialidad}</td>
-              <td>{v.telefono}</td>
-              <td>
-                <button className="btn-editar" onClick={() => abrirEditar(v)}>Editar</button>
-                <button className="btn-eliminar" onClick={() => eliminar(v.id)}>Eliminar</button>
-              </td>
+      <section className="card">
+        <div className="card-title">
+          <h2>Personal veterinario</h2>
+          <p>{veterinarios.length} {veterinarios.length === 1 ? "veterinario registrado" : "veterinarios registrados"}</p>
+        </div>
+
+        {formulario && (
+          <div className="form-card">
+            <h3>{formulario.id ? "Editar veterinario" : "Nuevo veterinario"}</h3>
+            <form onSubmit={guardar}>
+              <div className="form-grid">
+                <label>Nombre
+                  <input name="nombre" value={form.nombre} onChange={cambiar} required />
+                </label>
+                <label>Especialidad
+                  <input name="especialidad" value={form.especialidad} onChange={cambiar} required />
+                </label>
+                <label>Teléfono
+                  <input name="telefono" value={form.telefono} onChange={cambiar} maxLength={11} required />
+                </label>
+              </div>
+              <div className="form-acciones">
+                <button type="submit" className="btn-primary" disabled={guardando}>
+                  {guardando ? "Guardando..." : "Guardar"}
+                </button>
+                <button type="button" className="btn-secondary" onClick={() => setFormulario(null)} disabled={guardando}>
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {cargando && <p role="status">Cargando...</p>}
+        {error && <p className="error" role="alert">{error}</p>}
+        {!cargando && !error && veterinarios.length === 0 && <p>No hay registros.</p>}
+        <div className="table-scroll"><table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Especialidad</th>
+              <th>Teléfono</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table></div>
-    </section>
+          </thead>
+          <tbody>
+            {veterinarios.map((v) => (
+              <tr key={v.id}>
+                <td>{v.nombre}</td>
+                <td>{v.especialidad}</td>
+                <td>{v.telefono}</td>
+                <td>
+                  <div className="acciones-fila">
+                    <button className="link-editar" onClick={() => abrirEditar(v)}>Editar</button>
+                    <button className="link-eliminar" onClick={() => eliminar(v.id)}>Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table></div>
+      </section>
+    </>
   );
 }

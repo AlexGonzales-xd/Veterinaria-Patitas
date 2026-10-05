@@ -53,73 +53,96 @@ export default function AuthPage({ onLogin }) {
   }
 
   return (
-    <main className="auth-wrap">
-      <form className="auth-card" onSubmit={submit} noValidate>
-        <h1>{isRegister ? "Crear cuenta" : "Iniciar sesión"}</h1>
-        <p className="auth-sub">Veterinaria Patitas</p>
+    <div className="auth-wrap">
+      <div className="auth-panel-izq">
+        <div className="sidebar-logo">
+          <div className="mark">🐾</div>
+          <span className="wordmark">Patitas</span>
+        </div>
+        <div className="mensaje">
+          <h1>{isRegister ? "Cuidamos a los que más quieres" : "Bienvenido a la familia Patitas"}</h1>
+          <p>Gestiona las citas, el historial y los datos de tus mascotas desde un solo lugar.</p>
+        </div>
+        <p className="copy">© Veterinaria Patitas</p>
+      </div>
 
-        <label htmlFor="username">Usuario</label>
-        <input
-          id="username"
-          name="username"
-          value={form.username}
-          onChange={change}
-          autoComplete="username"
-          maxLength={50}
-        />
+      <div className="auth-panel-der">
+        <form className="auth-card" onSubmit={submit} noValidate>
+          <div className="sidebar-logo">
+            <div className="mark">🐾</div>
+            <span className="wordmark">Patitas</span>
+          </div>
 
-        {isRegister && (
-          <>
-            <label htmlFor="email">Correo</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={change}
-              autoComplete="email"
-              maxLength={100}
-            />
-          </>
-        )}
+          <h1>{isRegister ? "Crea tu cuenta" : "Bienvenido de vuelta"}</h1>
+          <p className="auth-sub">
+            {isRegister
+              ? "Regístrate como apoderado para gestionar las citas y el historial de tus mascotas."
+              : "Inicia sesión para gestionar las citas y el historial de tus mascotas."}
+          </p>
 
-        <label htmlFor="password">Contraseña</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          value={form.password}
-          onChange={change}
-          autoComplete={isRegister ? "new-password" : "current-password"}
-        />
+          <label htmlFor="username">Usuario</label>
+          <input
+            id="username"
+            name="username"
+            value={form.username}
+            onChange={change}
+            autoComplete="username"
+            maxLength={50}
+          />
 
-        {isRegister && (
-          <>
-            <label htmlFor="confirm">Repetir contraseña</label>
-            <input
-              id="confirm"
-              name="confirm"
-              type="password"
-              value={form.confirm}
-              onChange={change}
-              autoComplete="new-password"
-            />
-          </>
-        )}
+          {isRegister && (
+            <>
+              <label htmlFor="email">Correo electrónico</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={change}
+                autoComplete="email"
+                maxLength={100}
+              />
+            </>
+          )}
 
-        {error && <p className="auth-error" role="alert">{error}</p>}
+          <label htmlFor="password">Contraseña</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            value={form.password}
+            onChange={change}
+            autoComplete={isRegister ? "new-password" : "current-password"}
+          />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Procesando..." : isRegister ? "Registrarme" : "Entrar"}
-        </button>
+          {isRegister && (
+            <>
+              <label htmlFor="confirm">Confirmar contraseña</label>
+              <input
+                id="confirm"
+                name="confirm"
+                type="password"
+                value={form.confirm}
+                onChange={change}
+                autoComplete="new-password"
+              />
+            </>
+          )}
 
-        <p className="auth-switch">
-          {isRegister ? "¿Ya tienes cuenta?" : "¿No tienes cuenta?"}{" "}
-          <button type="button" className="auth-link" onClick={switchMode} disabled={loading}>
-            {isRegister ? "Inicia sesión" : "Regístrate"}
+          {error && <p className="auth-error" role="alert">{error}</p>}
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Procesando..." : isRegister ? "Crear cuenta" : "Iniciar sesión"}
           </button>
-        </p>
-      </form>
-    </main>
+
+          <p className="auth-switch">
+            {isRegister ? "¿Ya tienes cuenta?" : "¿No tienes cuenta?"}{" "}
+            <button type="button" className="auth-link" onClick={switchMode} disabled={loading}>
+              {isRegister ? "Inicia sesión" : "Regístrate"}
+            </button>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 }

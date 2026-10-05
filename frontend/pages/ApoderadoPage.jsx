@@ -70,63 +70,77 @@ export default function ApoderadosPage() {
   };
 
   return (
-    <section>
-      <h2>Apoderados</h2>
-      <div className="acciones-barra">
-        <button onClick={cargar} disabled={cargando}>Actualizar lista</button>
-        <button className="btn-agregar" onClick={abrirAgregar}>+ Agregar apoderado</button>
-      </div>
-
-      {formulario && (
-        <div className="form-card">
-          <h3>{formulario.id ? "Editar apoderado" : "Nuevo apoderado"}</h3>
-          <form onSubmit={guardar}>
-            <div className="form-grid">
-              <label>Nombre
-                <input name="nombre" value={form.nombre} onChange={cambiar} required />
-              </label>
-              <label>Teléfono
-                <input name="telefono" value={form.telefono} onChange={cambiar} maxLength={11} required />
-              </label>
-            </div>
-            <div className="form-acciones">
-              <button type="submit" className="btn-guardar" disabled={guardando}>
-                {guardando ? "Guardando..." : "Guardar"}
-              </button>
-              <button type="button" className="btn-secundario" onClick={() => setFormulario(null)} disabled={guardando}>
-                Cancelar
-              </button>
-            </div>
-          </form>
+    <>
+      <header className="page-header">
+        <div>
+          <h1>Apoderados</h1>
+          <p>Gestiona a los dueños de las mascotas</p>
         </div>
-      )}
+        <div className="page-header-actions">
+          <button className="btn-secondary" onClick={cargar} disabled={cargando}>Actualizar</button>
+          <button className="btn-primary" onClick={abrirAgregar}>+ Agregar apoderado</button>
+        </div>
+      </header>
 
-      {cargando && <p role="status">Cargando...</p>}
-      {error && <p className="error" role="alert">{error}</p>}
-      {!cargando && !error && apoderados.length === 0 && <p>No hay registros.</p>}
-      <div className="table-scroll"><table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Teléfono</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {apoderados.map((a) => (
-            <tr key={a.id}>
-              <td>{a.id}</td>
-              <td>{a.nombre}</td>
-              <td>{a.telefono}</td>
-              <td>
-                <button className="btn-editar" onClick={() => abrirEditar(a)}>Editar</button>
-                <button className="btn-eliminar" onClick={() => eliminar(a.id)}>Eliminar</button>
-              </td>
+      <section className="card">
+        <div className="card-title">
+          <h2>Apoderados registrados</h2>
+          <p>{apoderados.length} {apoderados.length === 1 ? "registro" : "registros"}</p>
+        </div>
+
+        {formulario && (
+          <div className="form-card">
+            <h3>{formulario.id ? "Editar apoderado" : "Nuevo apoderado"}</h3>
+            <form onSubmit={guardar}>
+              <div className="form-grid">
+                <label>Nombre
+                  <input name="nombre" value={form.nombre} onChange={cambiar} required />
+                </label>
+                <label>Teléfono
+                  <input name="telefono" value={form.telefono} onChange={cambiar} maxLength={11} required />
+                </label>
+              </div>
+              <div className="form-acciones">
+                <button type="submit" className="btn-primary" disabled={guardando}>
+                  {guardando ? "Guardando..." : "Guardar"}
+                </button>
+                <button type="button" className="btn-secondary" onClick={() => setFormulario(null)} disabled={guardando}>
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {cargando && <p role="status">Cargando...</p>}
+        {error && <p className="error" role="alert">{error}</p>}
+        {!cargando && !error && apoderados.length === 0 && <p>No hay registros.</p>}
+        <div className="table-scroll"><table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Teléfono</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table></div>
-    </section>
+          </thead>
+          <tbody>
+            {apoderados.map((a) => (
+              <tr key={a.id}>
+                <td>{a.id}</td>
+                <td>{a.nombre}</td>
+                <td>{a.telefono}</td>
+                <td>
+                  <div className="acciones-fila">
+                    <button className="link-editar" onClick={() => abrirEditar(a)}>Editar</button>
+                    <button className="link-eliminar" onClick={() => eliminar(a.id)}>Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table></div>
+      </section>
+    </>
   );
 }

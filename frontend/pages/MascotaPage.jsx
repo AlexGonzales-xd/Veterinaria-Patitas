@@ -10,7 +10,7 @@ export default function MascotasPage() {
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(true);
 
-  const [formulario, setFormulario] = useState(null); // null = cerrado, {} = nuevo, {...} = editando
+  const [formulario, setFormulario] = useState(null);
   const [form, setForm] = useState(VACIO);
   const [guardando, setGuardando] = useState(false);
 
@@ -82,84 +82,98 @@ export default function MascotasPage() {
   };
 
   return (
-    <section>
-      <h2>Mascotas</h2>
-      <div className="acciones-barra">
-        <button onClick={cargar} disabled={cargando}>Actualizar lista</button>
-        <button className="btn-agregar" onClick={abrirAgregar}>+ Agregar mascota</button>
-      </div>
-
-      {formulario && (
-        <div className="form-card">
-          <h3>{formulario.id ? "Editar mascota" : "Nueva mascota"}</h3>
-          <form onSubmit={guardar}>
-            <div className="form-grid">
-              <label>Nombre
-                <input name="nombre" value={form.nombre} onChange={cambiar} required />
-              </label>
-              <label>Raza
-                <input name="raza" value={form.raza} onChange={cambiar} required />
-              </label>
-              <label>Peso (kg)
-                <input name="peso" type="number" step="0.1" value={form.peso} onChange={cambiar} required />
-              </label>
-              <label>Género
-                <select name="genero" value={form.genero} onChange={cambiar} required>
-                  <option value="Macho">Macho</option>
-                  <option value="Hembra">Hembra</option>
-                </select>
-              </label>
-              <label>Apoderado (dueño)
-                <select name="idApoderado" value={form.idApoderado} onChange={cambiar} required>
-                  <option value="">-- Selecciona --</option>
-                  {apoderados.map((a) => (
-                    <option key={a.id} value={a.id}>{a.nombre} (tel: {a.telefono})</option>
-                  ))}
-                </select>
-              </label>
-            </div>
-            <div className="form-acciones">
-              <button type="submit" className="btn-guardar" disabled={guardando}>
-                {guardando ? "Guardando..." : "Guardar"}
-              </button>
-              <button type="button" className="btn-secundario" onClick={() => setFormulario(null)} disabled={guardando}>
-                Cancelar
-              </button>
-            </div>
-          </form>
+    <>
+      <header className="page-header">
+        <div>
+          <h1>Mascotas</h1>
+          <p>Gestiona las mascotas registradas en el sistema</p>
         </div>
-      )}
+        <div className="page-header-actions">
+          <button className="btn-secondary" onClick={cargar} disabled={cargando}>Actualizar</button>
+          <button className="btn-primary" onClick={abrirAgregar}>+ Agregar mascota</button>
+        </div>
+      </header>
 
-      {cargando && <p role="status">Cargando...</p>}
-      {error && <p className="error" role="alert">{error}</p>}
-      {!cargando && !error && mascotas.length === 0 && <p>No hay registros.</p>}
-      <div className="table-scroll"><table>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Raza</th>
-            <th>Peso (kg)</th>
-            <th>Género</th>
-            <th>Dueño</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {mascotas.map((m) => (
-            <tr key={m.id}>
-              <td>{m.nombre}</td>
-              <td>{m.raza}</td>
-              <td>{m.peso}</td>
-              <td>{m.genero}</td>
-              <td>{m.nombreApoderado}</td>
-              <td>
-                <button className="btn-editar" onClick={() => abrirEditar(m)}>Editar</button>
-                <button className="btn-eliminar" onClick={() => eliminar(m.id)}>Eliminar</button>
-              </td>
+      <section className="card">
+        <div className="card-title">
+          <h2>Mascotas registradas</h2>
+          <p>{mascotas.length} {mascotas.length === 1 ? "registro" : "registros"}</p>
+        </div>
+
+        {formulario && (
+          <div className="form-card">
+            <h3>{formulario.id ? "Editar mascota" : "Nueva mascota"}</h3>
+            <form onSubmit={guardar}>
+              <div className="form-grid">
+                <label>Nombre
+                  <input name="nombre" value={form.nombre} onChange={cambiar} required />
+                </label>
+                <label>Raza
+                  <input name="raza" value={form.raza} onChange={cambiar} required />
+                </label>
+                <label>Peso (kg)
+                  <input name="peso" type="number" step="0.1" value={form.peso} onChange={cambiar} required />
+                </label>
+                <label>Género
+                  <select name="genero" value={form.genero} onChange={cambiar} required>
+                    <option value="Macho">Macho</option>
+                    <option value="Hembra">Hembra</option>
+                  </select>
+                </label>
+                <label>Apoderado (dueño)
+                  <select name="idApoderado" value={form.idApoderado} onChange={cambiar} required>
+                    <option value="">-- Selecciona --</option>
+                    {apoderados.map((a) => (
+                      <option key={a.id} value={a.id}>{a.nombre} (tel: {a.telefono})</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <div className="form-acciones">
+                <button type="submit" className="btn-primary" disabled={guardando}>
+                  {guardando ? "Guardando..." : "Guardar"}
+                </button>
+                <button type="button" className="btn-secondary" onClick={() => setFormulario(null)} disabled={guardando}>
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {cargando && <p role="status">Cargando...</p>}
+        {error && <p className="error" role="alert">{error}</p>}
+        {!cargando && !error && mascotas.length === 0 && <p>No hay registros.</p>}
+        <div className="table-scroll"><table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Raza</th>
+              <th>Peso (kg)</th>
+              <th>Género</th>
+              <th>Dueño</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table></div>
-    </section>
+          </thead>
+          <tbody>
+            {mascotas.map((m) => (
+              <tr key={m.id}>
+                <td>{m.nombre}</td>
+                <td>{m.raza}</td>
+                <td>{m.peso}</td>
+                <td>{m.genero}</td>
+                <td>{m.nombreApoderado}</td>
+                <td>
+                  <div className="acciones-fila">
+                    <button className="link-editar" onClick={() => abrirEditar(m)}>Editar</button>
+                    <button className="link-eliminar" onClick={() => eliminar(m.id)}>Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table></div>
+      </section>
+    </>
   );
 }

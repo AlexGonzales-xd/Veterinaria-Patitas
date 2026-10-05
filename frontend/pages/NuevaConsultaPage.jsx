@@ -49,31 +49,35 @@ export default function NuevaConsultaPage({ consulta, onGuardar, onCancelar }) {
       <h3>{consulta.id ? "Editar consulta" : "Nueva consulta"}</h3>
       {error && <p className="error" role="alert">{error}</p>}
       {cargando && <p role="status">Cargando opciones...</p>}
-      <label>Fecha y hora
-        <input type="datetime-local" name="fecha" value={form.fecha} onChange={cambiar} required />
-      </label>
-      <label>Apoderado
-        <select name="idApoderado" value={form.idApoderado} onChange={cambiar} required>
-          <option value="">Seleccionar apoderado</option>
-          {apoderados.map((a) => <option key={a.id} value={a.id}>{a.nombre}</option>)}
-        </select>
-      </label>
-      <label>Veterinario
-        <select name="idVeterinario" value={form.idVeterinario} onChange={cambiar} required>
-          <option value="">Seleccionar veterinario</option>
-          {veterinarios.map((v) => <option key={v.id} value={v.id}>{v.nombre}</option>)}
-        </select>
-      </label>
-      <label>Mascota
-        <select name="idMascota" value={form.idMascota} onChange={cambiar} required>
-          <option value="">Seleccionar mascota</option>
-          {mascotas.map((m) => <option key={m.id} value={m.id}>{m.nombre}</option>)}
-        </select>
-      </label>
-      <button disabled={cargando || guardando || !apoderados.length || !veterinarios.length || !mascotas.length}>
-        {guardando ? "Guardando..." : "Guardar consulta"}
-      </button>{" "}
-      <button type="button" onClick={onCancelar} disabled={guardando}>Cancelar</button>
+      <div className="form-grid">
+        <label>Fecha y hora
+          <input type="datetime-local" name="fecha" value={form.fecha} onChange={cambiar} required />
+        </label>
+        <label>Apoderado
+          <select name="idApoderado" value={form.idApoderado} onChange={cambiar} required>
+            <option value="">Seleccionar apoderado</option>
+            {apoderados.map((a) => <option key={a.id} value={a.id}>{a.nombre}</option>)}
+          </select>
+        </label>
+        <label>Veterinario
+          <select name="idVeterinario" value={form.idVeterinario} onChange={cambiar} required>
+            <option value="">Seleccionar veterinario</option>
+            {veterinarios.map((v) => <option key={v.id} value={v.id}>{v.nombre}</option>)}
+          </select>
+        </label>
+        <label>Mascota
+          <select name="idMascota" value={form.idMascota} onChange={cambiar} required>
+            <option value="">Seleccionar mascota</option>
+            {mascotas.map((m) => <option key={m.id} value={m.id}>{m.nombre}</option>)}
+          </select>
+        </label>
+      </div>
+      <div className="form-acciones">
+        <button className="btn-primary" disabled={cargando || guardando || !apoderados.length || !veterinarios.length || !mascotas.length}>
+          {guardando ? "Guardando..." : "Guardar consulta"}
+        </button>
+        <button type="button" className="btn-secondary" onClick={onCancelar} disabled={guardando}>Cancelar</button>
+      </div>
     </form>
   );
 }
