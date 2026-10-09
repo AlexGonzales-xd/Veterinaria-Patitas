@@ -4,6 +4,7 @@ import ApoderadosPage from "./pages/ApoderadoPage";
 import VeterinariosPage from "./pages/VeterinariosPage";
 import ConsultaPage from "./pages/ConsultaPage";
 import AuthPage from "./pages/AuthPage";
+import PerfilPage from "./pages/PerfilPage";
 import { getSession, logout, getRol } from "./service/AuthService";
 import "./css/style.css";
 import "./css/ui.css";
@@ -63,7 +64,8 @@ export default function App() {
   const secciones = SECCIONES_POR_ROL[rol];
   const esAdmin = rol === "admin";
   const esPersonal = rol === "admin" || rol === "veterinario"; // gestionan consultas
-  const seccionActual = secciones.includes(seccion) ? seccion : secciones[0];
+  const enPerfil = seccion === "Perfil";
+  const seccionActual = enPerfil ? "Perfil" : secciones.includes(seccion) ? seccion : secciones[0];
 
   const inicial = (usuario.username || "?").charAt(0).toUpperCase();
 
@@ -110,16 +112,24 @@ export default function App() {
             ☰
           </button>
 
-          <div className="user-pill">
-            <div className="avatar">{inicial}</div>
-            <div className="datos">
+          <button
+            type="button"
+            className="user-pill"
+            onClick={() => irA("Perfil")}
+            aria-label="Ver mi perfil"
+            aria-current={enPerfil ? "page" : undefined}
+            title="Ver mi perfil"
+          >
+            <span className="avatar">{inicial}</span>
+            <span className="datos">
               <strong>{usuario.username}</strong>
               <span>{usuario.rol || "Usuario"}</span>
-            </div>
-          </div>
+            </span>
+          </button>
         </div>
 
         <div className="content-body">
+          {seccionActual === "Perfil" && <PerfilPage usuario={usuario} rol={rol} />}
           {seccionActual === "Mascotas" && <MascotasPage usuario={usuario} rol={rol} />}
           {seccionActual === "Apoderados" && esAdmin && <ApoderadosPage />}
           {seccionActual === "Veterinarios" && <VeterinariosPage puedeEditar={esAdmin} />}

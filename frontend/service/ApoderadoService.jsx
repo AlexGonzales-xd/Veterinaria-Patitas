@@ -1,8 +1,11 @@
-
 import { serviceFetch } from './ClientService';
 
 export function listarApoderados() {
     return serviceFetch('/apoderados');
+}
+
+export function obtenerApoderado(id) {
+    return serviceFetch(`/apoderados/${id}`, { objeto: true });
 }
 
 export function crearApoderado({ nombre, telefono }) {

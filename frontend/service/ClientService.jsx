@@ -1,7 +1,7 @@
 export const API_URL = (import.meta.env.VITE_API_URL || "https://veterinaria-patitas-production.up.railway.app/api").replace(/\/$/, "");
 
 export async function serviceFetch(endpoint, options = {}) {
-    const { headers, ...rest } = options;
+    const { headers, objeto, ...rest } = options; // objeto: true -> se espera un objeto, no una lista
 
     let response;
     try {
@@ -31,7 +31,7 @@ export async function serviceFetch(endpoint, options = {}) {
         throw new Error(`El backend respondió HTTP ${response.status}: ${detalle}`);
     }
 
-    if ((!options.method || options.method === 'GET') && !Array.isArray(data)) {
+    if (!objeto && (!options.method || options.method === 'GET') && !Array.isArray(data)) {
         throw new Error("El backend no devolvió una lista válida.");
     }
     return data;

@@ -4,6 +4,10 @@ export function listarVeterinarios() {
     return serviceFetch('/veterinarios');
 }
 
+export function obtenerVeterinario(id) {
+    return serviceFetch(`/veterinarios/${id}`, { objeto: true });
+}
+
 export function crearVeterinario({
     nombre,
     especialidad,
