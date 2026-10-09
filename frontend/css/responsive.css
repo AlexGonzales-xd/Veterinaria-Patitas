@@ -79,7 +79,7 @@ img, svg { max-width: 100%; }
 
   /* Botones de Editar / Eliminar más fáciles de tocar */
   .acciones-fila { gap: 6px; }
-  .acciones-fila button { padding: 8px 6px; }
+  .acciones-fila .btn-sm { padding: 9px 12px; }
 
   .user-pill { padding: 6px 14px 6px 6px; }
 }
