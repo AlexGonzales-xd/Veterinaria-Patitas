@@ -35,3 +35,15 @@ export function getSession() {
 export function estaAutenticado() {
     return Boolean(getSession());
 }
+
+export function getRol(usuario) {
+    const nombre = (usuario?.rol || "")
+        .toString()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+
+    if (nombre.includes("admin")) return "admin";
+    if (nombre.includes("veterin")) return "veterinario";
+    return "apoderado";
+}
