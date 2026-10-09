@@ -96,6 +96,17 @@ public class AuthController {
         }
 
         Usuario u = usuarioOpt.get();
+
+        // Toda cuenta con rol apoderado (id 4) debe tener su ficha de apoderado.
+        // Si no la tiene (cuentas creadas antes o a mano en la base de datos), se crea y vincula ahora.
+        if (u.getApoderado() == null && u.getRol() != null
+                && Integer.valueOf(4).equals(u.getRol().getIdRol())) {
+            Apoderado ficha = new Apoderado();
+            ficha.setNombre(u.getUsername());
+            ficha.setTelefono("000000000");
+            u.setApoderado(apoderadoRepository.save(ficha));
+        }
+
         u.setUltimoLogin(LocalDateTime.now());
         u.setIntentosFallidos(0);
         usuarioRepository.save(u);

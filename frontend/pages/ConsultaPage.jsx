@@ -42,7 +42,7 @@ export default function ConsultaPage({ usuario, rol, puedeEditar = false }) {
       if (esApoderado) {
         if (idPropio == null) {
           lista = [];
-          setError("Tu cuenta aún no está vinculada a un apoderado. Pide al administrador que la configure.");
+          setError("No se encontró tu ficha de apoderado. Cierra sesión y vuelve a iniciar sesión; si sigue igual, avisa al administrador.");
         } else {
           lista = await listarCitasPorApoderado(idPropio);
         }

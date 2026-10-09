@@ -33,7 +33,7 @@ export default function MascotasPage({ usuario, rol }) {
       if (esApoderado) {
         if (idPropio == null) {
           setMascotas([]);
-          setError("Tu cuenta aún no está vinculada a un apoderado. Pide al administrador que la configure.");
+          setError("No se encontró tu ficha de apoderado. Cierra sesión y vuelve a iniciar sesión; si sigue igual, avisa al administrador.");
         } else {
           setMascotas(await listarMascotasPorApoderado(idPropio));
         }
