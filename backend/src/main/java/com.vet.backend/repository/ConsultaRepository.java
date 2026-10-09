@@ -14,6 +14,8 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
 
     List<Consulta> findByVeterinarioId(Long idVeterinario);
 
+    List<Consulta> findByApoderadoId(Long idApoderado);
+
     List<Consulta> findByFechaConBetween(LocalDateTime inicio, LocalDateTime fin);
 
     void deleteByMascotaId(Long idMascota);

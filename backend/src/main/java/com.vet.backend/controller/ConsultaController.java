@@ -55,6 +55,11 @@ public class ConsultaController {
         return consultaService.listarPorMascota(idMascota);
     }
 
+    @GetMapping("/apoderado/{idApoderado}")
+    public List<Consulta> listarPorApoderado(@PathVariable Long idApoderado) {
+        return consultaService.listarPorApoderado(idApoderado);
+    }
+
     @GetMapping("/veterinario/{idVeterinario}")
     public List<Consulta> listarPorVeterinario(@PathVariable Long idVeterinario) {
         return consultaService.listarPorVeterinario(idVeterinario);

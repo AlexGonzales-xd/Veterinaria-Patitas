@@ -32,6 +32,10 @@ public class ConsultaService {
         return consultaRepository.findByMascotaId(idMascota);
     }
 
+    public List<Consulta> listarPorApoderado(Long idApoderado) {
+        return consultaRepository.findByApoderadoId(idApoderado);
+    }
+
     public List<Consulta> listarPorVeterinario(Long idVeterinario) {
         return consultaRepository.findByVeterinarioId(idVeterinario);
     }

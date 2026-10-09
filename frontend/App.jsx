@@ -4,10 +4,15 @@ import ApoderadosPage from "./pages/ApoderadoPage";
 import VeterinariosPage from "./pages/VeterinariosPage";
 import ConsultaPage from "./pages/ConsultaPage";
 import AuthPage from "./pages/AuthPage";
-import { getSession, logout } from "./service/AuthService";
+import { getSession, logout, getRol } from "./service/AuthService";
 import "./css/style.css";
 
-const SECCIONES = ["Mascotas", "Apoderados", "Veterinarios", "Consultas"];
+// Secciones visibles según el rol
+const SECCIONES_POR_ROL = {
+  admin: ["Mascotas", "Apoderados", "Veterinarios", "Consultas"],
+  veterinario: ["Mascotas", "Consultas"],
+  apoderado: ["Mascotas", "Consultas", "Veterinarios"],
+};
 
 export default function App() {
   const [usuario, setUsuario] = useState(getSession);
@@ -19,7 +24,17 @@ export default function App() {
     setSeccion("Mascotas");
   }
 
-  if (!usuario) return <AuthPage onLogin={setUsuario} />;
+  function iniciarSesion(u) {
+    setUsuario(u);
+    setSeccion("Mascotas");
+  }
+
+  if (!usuario) return <AuthPage onLogin={iniciarSesion} />;
+
+  const rol = getRol(usuario);
+  const secciones = SECCIONES_POR_ROL[rol];
+  const puedeEditar = rol === "admin"; // solo el admin crea, edita y elimina
+  const seccionActual = secciones.includes(seccion) ? seccion : secciones[0];
 
   const inicial = (usuario.username || "?").charAt(0).toUpperCase();
 
@@ -32,11 +47,11 @@ export default function App() {
         </div>
 
         <nav className="sidebar-nav" aria-label="Secciones">
-          {SECCIONES.map((nombre) => (
+          {secciones.map((nombre) => (
             <button
               key={nombre}
               onClick={() => setSeccion(nombre)}
-              aria-pressed={seccion === nombre}
+              aria-pressed={seccionActual === nombre}
             >
               {nombre}
             </button>
@@ -60,10 +75,10 @@ export default function App() {
         </div>
 
         <div className="content-body">
-          {seccion === "Mascotas" && <MascotasPage />}
-          {seccion === "Apoderados" && <ApoderadosPage />}
-          {seccion === "Veterinarios" && <VeterinariosPage />}
-          {seccion === "Consultas" && <ConsultaPage />}
+          {seccionActual === "Mascotas" && <MascotasPage usuario={usuario} rol={rol} puedeEditar={puedeEditar} />}
+          {seccionActual === "Apoderados" && rol === "admin" && <ApoderadosPage />}
+          {seccionActual === "Veterinarios" && <VeterinariosPage puedeEditar={puedeEditar} />}
+          {seccionActual === "Consultas" && <ConsultaPage usuario={usuario} rol={rol} puedeEditar={puedeEditar} />}
         </div>
       </div>
     </div>

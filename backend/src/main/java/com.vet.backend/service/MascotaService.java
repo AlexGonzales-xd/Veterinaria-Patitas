@@ -21,6 +21,10 @@ public class MascotaService {
         return mascotaRepository.listarConDueno();
     }
 
+    public List<MascotaDTO> listarConDuenoPorApoderado(Long idApoderado) {
+        return mascotaRepository.listarConDuenoPorApoderado(idApoderado);
+    }
+
     public List<Mascota> listar() {
         return mascotaRepository.findAll();
     }

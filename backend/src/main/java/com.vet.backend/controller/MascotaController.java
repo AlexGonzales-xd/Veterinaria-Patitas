@@ -24,6 +24,11 @@ public class MascotaController {
         return mascotaService.listarConDueno();
     }
 
+    @GetMapping("/apoderado/{idApoderado}")
+    public List<MascotaDTO> listarPorApoderado(@PathVariable Long idApoderado) {
+        return mascotaService.listarConDuenoPorApoderado(idApoderado);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Mascota> buscarPorId(@PathVariable Long id) {
         return mascotaService.buscarPorId(id)

@@ -4,5 +4,7 @@ public record AuthResponse(
         Long idUsuario,
         String username,
         String email,
-        String rol
+        String rol,
+        Long idApoderado,
+        Long idVeterinario
 ) {}

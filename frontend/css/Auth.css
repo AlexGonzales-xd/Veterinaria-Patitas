@@ -50,3 +50,15 @@
   .auth-wrap { flex-direction: column; }
   .auth-panel-izq { min-height: 280px; }
 }
+
+
+.password-field { position: relative; margin-bottom: 14px; }
+.password-field input { margin-top: 6px; padding-right: 48px; }
+.password-toggle {
+  position: absolute; right: 8px; bottom: 7px;
+  width: 36px; height: 36px; padding: 0; border: 0; border-radius: 10px;
+  background: transparent; color: var(--text-muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.password-toggle:hover { color: var(--text-strong); background: rgba(0,0,0,.05); }
+.password-toggle:focus-visible { outline: 2px solid var(--accent); }
