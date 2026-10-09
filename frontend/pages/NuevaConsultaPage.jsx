@@ -4,6 +4,14 @@ import { listarApoderados } from "../service/ApoderadoService";
 import { listarVeterinarios } from "../service/VeterinarioService";
 import { listarMascotas } from "../service/MascotaService";
 
+// Inicio del día de hoy en hora local, formato datetime-local
+function inicioDeHoy() {
+  const d = new Date();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${mm}-${dd}T00:00`;
+}
+
 export default function NuevaConsultaPage({ consulta, onGuardar, onCancelar }) {
   const [form, setForm] = useState({
     fecha: consulta.fechaCon?.slice(0, 16) ?? "",
@@ -51,7 +59,7 @@ export default function NuevaConsultaPage({ consulta, onGuardar, onCancelar }) {
       {cargando && <p role="status">Cargando opciones...</p>}
       <div className="form-grid">
         <label>Fecha y hora
-          <input type="datetime-local" name="fecha" value={form.fecha} onChange={cambiar} required />
+          <input type="datetime-local" name="fecha" min={inicioDeHoy()} value={form.fecha} onChange={cambiar} required />
         </label>
         <label>Apoderado
           <select name="idApoderado" value={form.idApoderado} onChange={cambiar} required>

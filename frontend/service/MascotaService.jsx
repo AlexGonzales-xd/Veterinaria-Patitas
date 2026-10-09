@@ -4,6 +4,10 @@ export function listarMascotas() {
     return serviceFetch('/mascotas');
 }
 
+export function listarMascotasPorApoderado(idApoderado) {
+    return serviceFetch(`/mascotas/apoderado/${idApoderado}`);
+}
+
 export function crearMascota({ nombre, raza, peso, genero, idApoderado }) {
     return serviceFetch('/mascotas', {
         method: 'POST',

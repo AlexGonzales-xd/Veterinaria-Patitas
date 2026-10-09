@@ -114,12 +114,7 @@ td { padding: 14px 0; border-top: 1px solid var(--border); font-size: 14px; colo
 td:first-child { font-weight: 600; color: var(--text-strong); }
 th:not(:last-child), td:not(:last-child) { padding-right: 16px; }
 
-.acciones-fila { display: flex; gap: 14px; font-size: 13px; font-weight: 600; }
-.acciones-fila button { all: unset; cursor: pointer; }
-.link-editar { color: var(--text-strong); }
-.link-editar:hover { text-decoration: underline; }
-.link-eliminar { color: var(--danger); }
-.link-eliminar:hover { text-decoration: underline; }
+.acciones-fila { display: flex; gap: 8px; flex-wrap: nowrap; }
 
 .error { padding: 12px 16px; background: #fdeee9; color: var(--danger); border-radius: 12px; font-size: 14px; }
 

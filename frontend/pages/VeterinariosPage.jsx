@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import ConfirmarEliminar from "../components/ConfirmarEliminar";
 import { listarVeterinarios, crearVeterinario, actualizarVeterinario, eliminarVeterinario } from "../service/VeterinarioService";
 
 const VACIO = { nombre: "", especialidad: "", telefono: "" };
 
-export default function VeterinariosPage() {
+export default function VeterinariosPage({ puedeEditar = false }) {
   const [veterinarios, setVeterinarios] = useState([]);
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(true);
@@ -11,6 +12,8 @@ export default function VeterinariosPage() {
   const [formulario, setFormulario] = useState(null);
   const [form, setForm] = useState(VACIO);
   const [guardando, setGuardando] = useState(false);
+  const [porEliminar, setPorEliminar] = useState(null);
+  const [eliminando, setEliminando] = useState(false);
 
   async function cargar() {
     setCargando(true);
@@ -59,26 +62,30 @@ export default function VeterinariosPage() {
     }
   }
 
-  const eliminar = async (id) => {
-    if (!confirm("¿Eliminar este veterinario?")) return;
+  async function confirmarEliminar() {
+    setEliminando(true);
     try {
-      await eliminarVeterinario(id);
+      await eliminarVeterinario(porEliminar.id);
+      setPorEliminar(null);
       cargar();
     } catch (e) {
+      setPorEliminar(null);
       setError(e.message);
+    } finally {
+      setEliminando(false);
     }
-  };
+  }
 
   return (
     <>
       <header className="page-header">
         <div>
           <h1>Veterinarios</h1>
-          <p>Gestiona al personal veterinario de la clínica</p>
+          <p>{puedeEditar ? "Gestiona al personal veterinario de la clínica" : "Conoce al personal veterinario de la clínica"}</p>
         </div>
         <div className="page-header-actions">
           <button className="btn-secondary" onClick={cargar} disabled={cargando}>Actualizar</button>
-          <button className="btn-primary" onClick={abrirAgregar}>+ Nuevo veterinario</button>
+          {puedeEditar && <button className="btn-primary" onClick={abrirAgregar}>+ Nuevo veterinario</button>}
         </div>
       </header>
 
@@ -88,7 +95,7 @@ export default function VeterinariosPage() {
           <p>{veterinarios.length} {veterinarios.length === 1 ? "veterinario registrado" : "veterinarios registrados"}</p>
         </div>
 
-        {formulario && (
+        {puedeEditar && formulario && (
           <div className="form-card">
             <h3>{formulario.id ? "Editar veterinario" : "Nuevo veterinario"}</h3>
             <form onSubmit={guardar}>
@@ -124,7 +131,7 @@ export default function VeterinariosPage() {
               <th>Nombre</th>
               <th>Especialidad</th>
               <th>Teléfono</th>
-              <th>Acciones</th>
+              {puedeEditar && <th>Acciones</th>}
             </tr>
           </thead>
           <tbody>
@@ -133,17 +140,26 @@ export default function VeterinariosPage() {
                 <td>{v.nombre}</td>
                 <td>{v.especialidad}</td>
                 <td>{v.telefono}</td>
+                {puedeEditar && (
                 <td>
                   <div className="acciones-fila">
-                    <button className="link-editar" onClick={() => abrirEditar(v)}>Editar</button>
-                    <button className="link-eliminar" onClick={() => eliminar(v.id)}>Eliminar</button>
+                    <button className="btn-sm btn-editar" onClick={() => abrirEditar(v)}>Editar</button>
+                    <button className="btn-sm btn-eliminar" onClick={() => setPorEliminar(v)}>Eliminar</button>
                   </div>
                 </td>
+                )}
               </tr>
             ))}
           </tbody>
         </table></div>
       </section>
+      <ConfirmarEliminar
+        abierto={Boolean(porEliminar)}
+        mensaje={`Vas a eliminar al veterinario «${porEliminar?.nombre ?? ""}». Esta acción no se puede deshacer.`}
+        cargando={eliminando}
+        onConfirmar={confirmarEliminar}
+        onCancelar={() => setPorEliminar(null)}
+      />
     </>
   );
 }

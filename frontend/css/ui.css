@@ -1,0 +1,70 @@
+
+.btn-primary, .btn-secondary, .btn-danger, .btn-sm {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: inherit; font-weight: 600; line-height: 1.2; cursor: pointer;
+  transition: transform .12s ease, box-shadow .15s ease, background-color .15s ease,
+              border-color .15s ease, color .15s ease, filter .15s ease;
+}
+.btn-primary:active, .btn-secondary:active, .btn-danger:active, .btn-sm:active { transform: translateY(1px) scale(.98); }
+button:disabled { opacity: .55; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+.btn-primary {
+  background: linear-gradient(180deg, #ff916b, var(--accent));
+  box-shadow: 0 6px 16px rgba(255, 128, 84, .35);
+}
+.btn-primary:hover:not(:disabled) { filter: none; transform: translateY(-1px); box-shadow: 0 10px 22px rgba(255, 128, 84, .42); }
+
+.btn-secondary { box-shadow: 0 1px 2px rgba(38, 64, 45, .06); }
+.btn-secondary:hover:not(:disabled) { border-color: var(--sidebar); background: #f6f9f3; transform: translateY(-1px); }
+
+.btn-danger {
+  background: linear-gradient(180deg, #d8683f, var(--danger)); color: #fff; border: none;
+  border-radius: 12px; padding: 13px 22px; font-size: 15px;
+  box-shadow: 0 6px 16px rgba(201, 87, 47, .32);
+}
+.btn-danger:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(201, 87, 47, .4); }
+
+/* ---------- Botones pequeños de la tabla ---------- */
+.btn-sm { padding: 8px 14px; border-radius: 10px; font-size: 13px; border: 1px solid transparent; }
+
+.btn-editar { background: #eef4ea; color: var(--text-strong); border-color: var(--border); }
+.btn-editar:hover:not(:disabled) { background: var(--sidebar); color: #fff; border-color: var(--sidebar); transform: translateY(-1px); }
+
+.btn-eliminar { background: #fdeee9; color: var(--danger); border-color: #f4d3c7; }
+.btn-eliminar:hover:not(:disabled) { background: var(--danger); color: #fff; border-color: var(--danger); transform: translateY(-1px); }
+
+.solo-lectura { color: var(--text-muted); font-size: 13px; }
+
+/* ---------- Diálogo "¿Estás seguro?" ---------- */
+.modal-fondo {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  background: rgba(23, 33, 26, .55); backdrop-filter: blur(2px);
+  animation: modal-fade .15s ease;
+}
+.modal {
+  width: 100%; max-width: 420px; background: #fff; border-radius: 20px;
+  padding: 28px 26px 24px; text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .3);
+  animation: modal-pop .18s ease;
+}
+.modal-icono {
+  width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #fdeee9; font-size: 26px;
+}
+.modal h2 { margin: 0 0 8px; font-size: 22px; }
+.modal p { margin: 0 0 22px; color: var(--text-muted); font-size: 15px; line-height: 1.5; }
+.modal-acciones { display: flex; gap: 10px; }
+.modal-acciones > button { flex: 1; }
+
+@keyframes modal-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-pop { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 480px) {
+  .modal-acciones { flex-direction: column-reverse; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary, .btn-secondary, .btn-danger, .btn-sm { transition: none; }
+  .modal-fondo, .modal { animation: none; }
+}

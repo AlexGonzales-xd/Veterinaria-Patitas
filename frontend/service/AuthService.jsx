@@ -36,6 +36,7 @@ export function estaAutenticado() {
     return Boolean(getSession());
 }
 
+// Normaliza el nombre del rol del backend a: "admin" | "veterinario" | "apoderado"
 export function getRol(usuario) {
     const nombre = (usuario?.rol || "")
         .toString()

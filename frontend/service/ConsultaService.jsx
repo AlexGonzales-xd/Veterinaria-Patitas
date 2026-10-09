@@ -5,6 +5,11 @@ export function listarCitas() {
     return serviceFetch('/consultas');
 }
 
+// LISTAR POR APODERADO
+export function listarCitasPorApoderado(idApoderado) {
+    return serviceFetch(`/consultas/apoderado/${idApoderado}`);
+}
+
 // LISTAR POR VETERINARIO
 export function listarCitasPorVeterinario(idVeterinario) {
     return serviceFetch(`/consultas/veterinario/${idVeterinario}`);

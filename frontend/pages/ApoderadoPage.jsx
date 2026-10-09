@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ConfirmarEliminar from "../components/ConfirmarEliminar";
 import { listarApoderados, crearApoderado, actualizarApoderado, eliminarApoderado } from "../service/ApoderadoService";
 
 const VACIO = { nombre: "", telefono: "" };
@@ -11,6 +12,8 @@ export default function ApoderadosPage() {
   const [formulario, setFormulario] = useState(null);
   const [form, setForm] = useState(VACIO);
   const [guardando, setGuardando] = useState(false);
+  const [porEliminar, setPorEliminar] = useState(null);
+  const [eliminando, setEliminando] = useState(false);
 
   async function cargar() {
     setCargando(true);
@@ -59,15 +62,19 @@ export default function ApoderadosPage() {
     }
   }
 
-  const eliminar = async (id) => {
-    if (!confirm("¿Eliminar este apoderado?")) return;
+  async function confirmarEliminar() {
+    setEliminando(true);
     try {
-      await eliminarApoderado(id);
+      await eliminarApoderado(porEliminar.id);
+      setPorEliminar(null);
       cargar();
     } catch (e) {
+      setPorEliminar(null);
       setError(e.message);
+    } finally {
+      setEliminando(false);
     }
-  };
+  }
 
   return (
     <>
@@ -132,8 +139,8 @@ export default function ApoderadosPage() {
                 <td>{a.telefono}</td>
                 <td>
                   <div className="acciones-fila">
-                    <button className="link-editar" onClick={() => abrirEditar(a)}>Editar</button>
-                    <button className="link-eliminar" onClick={() => eliminar(a.id)}>Eliminar</button>
+                    <button className="btn-sm btn-editar" onClick={() => abrirEditar(a)}>Editar</button>
+                    <button className="btn-sm btn-eliminar" onClick={() => setPorEliminar(a)}>Eliminar</button>
                   </div>
                 </td>
               </tr>
@@ -141,6 +148,13 @@ export default function ApoderadosPage() {
           </tbody>
         </table></div>
       </section>
+      <ConfirmarEliminar
+        abierto={Boolean(porEliminar)}
+        mensaje={`Vas a eliminar al apoderado «${porEliminar?.nombre ?? ""}». Esta acción no se puede deshacer.`}
+        cargando={eliminando}
+        onConfirmar={confirmarEliminar}
+        onCancelar={() => setPorEliminar(null)}
+      />
     </>
   );
 }

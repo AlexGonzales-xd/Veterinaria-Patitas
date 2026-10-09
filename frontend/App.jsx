@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MascotasPage from "./pages/MascotaPage";
 import ApoderadosPage from "./pages/ApoderadoPage";
 import VeterinariosPage from "./pages/VeterinariosPage";
@@ -6,6 +6,8 @@ import ConsultaPage from "./pages/ConsultaPage";
 import AuthPage from "./pages/AuthPage";
 import { getSession, logout, getRol } from "./service/AuthService";
 import "./css/style.css";
+import "./css/ui.css";
+import "./css/responsive.css";
 
 // Secciones visibles según el rol
 const SECCIONES_POR_ROL = {
@@ -17,11 +19,32 @@ const SECCIONES_POR_ROL = {
 export default function App() {
   const [usuario, setUsuario] = useState(getSession);
   const [seccion, setSeccion] = useState("Mascotas");
+  const [menuAbierto, setMenuAbierto] = useState(false); // menú lateral en móvil
+
+  // Con el menú abierto: bloquea el scroll de fondo, Escape lo cierra
+  // y se cierra solo si la pantalla vuelve a ser ancha.
+  useEffect(() => {
+    if (!menuAbierto) return;
+    const overflowPrevio = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const alTeclear = (e) => { if (e.key === "Escape") setMenuAbierto(false); };
+    const alRedimensionar = () => { if (window.innerWidth > 900) setMenuAbierto(false); };
+    window.addEventListener("keydown", alTeclear);
+    window.addEventListener("resize", alRedimensionar);
+
+    return () => {
+      document.body.style.overflow = overflowPrevio;
+      window.removeEventListener("keydown", alTeclear);
+      window.removeEventListener("resize", alRedimensionar);
+    };
+  }, [menuAbierto]);
 
   function cerrarSesion() {
     logout();
     setUsuario(null);
     setSeccion("Mascotas");
+    setMenuAbierto(false);
   }
 
   function iniciarSesion(u) {
@@ -29,18 +52,30 @@ export default function App() {
     setSeccion("Mascotas");
   }
 
+  function irA(nombre) {
+    setSeccion(nombre);
+    setMenuAbierto(false);
+  }
+
   if (!usuario) return <AuthPage onLogin={iniciarSesion} />;
 
   const rol = getRol(usuario);
   const secciones = SECCIONES_POR_ROL[rol];
-  const puedeEditar = rol === "admin"; // solo el admin crea, edita y elimina
+  const esAdmin = rol === "admin";
+  const esPersonal = rol === "admin" || rol === "veterinario"; // gestionan consultas
   const seccionActual = secciones.includes(seccion) ? seccion : secciones[0];
 
   const inicial = (usuario.username || "?").charAt(0).toUpperCase();
 
   return (
     <div className="app-shell">
-      <aside className="sidebar">
+      <div
+        className={`sidebar-overlay${menuAbierto ? " visible" : ""}`}
+        onClick={() => setMenuAbierto(false)}
+        aria-hidden="true"
+      />
+
+      <aside className={`sidebar${menuAbierto ? " abierto" : ""}`} id="menu-lateral">
         <div className="sidebar-logo">
           <div className="mark">🐾</div>
           <span className="wordmark">Patitas</span>
@@ -50,7 +85,7 @@ export default function App() {
           {secciones.map((nombre) => (
             <button
               key={nombre}
-              onClick={() => setSeccion(nombre)}
+              onClick={() => irA(nombre)}
               aria-pressed={seccionActual === nombre}
             >
               {nombre}
@@ -65,6 +100,16 @@ export default function App() {
 
       <div className="content-area">
         <div className="content-topbar">
+          <button
+            className="menu-toggle"
+            onClick={() => setMenuAbierto(true)}
+            aria-label="Abrir menú"
+            aria-controls="menu-lateral"
+            aria-expanded={menuAbierto}
+          >
+            ☰
+          </button>
+
           <div className="user-pill">
             <div className="avatar">{inicial}</div>
             <div className="datos">
@@ -75,10 +120,10 @@ export default function App() {
         </div>
 
         <div className="content-body">
-          {seccionActual === "Mascotas" && <MascotasPage usuario={usuario} rol={rol} puedeEditar={puedeEditar} />}
-          {seccionActual === "Apoderados" && rol === "admin" && <ApoderadosPage />}
-          {seccionActual === "Veterinarios" && <VeterinariosPage puedeEditar={puedeEditar} />}
-          {seccionActual === "Consultas" && <ConsultaPage usuario={usuario} rol={rol} puedeEditar={puedeEditar} />}
+          {seccionActual === "Mascotas" && <MascotasPage usuario={usuario} rol={rol} />}
+          {seccionActual === "Apoderados" && esAdmin && <ApoderadosPage />}
+          {seccionActual === "Veterinarios" && <VeterinariosPage puedeEditar={esAdmin} />}
+          {seccionActual === "Consultas" && <ConsultaPage usuario={usuario} rol={rol} puedeEditar={esPersonal} />}
         </div>
       </div>
     </div>
