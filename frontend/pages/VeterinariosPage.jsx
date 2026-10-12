@@ -128,6 +128,7 @@ export default function VeterinariosPage({ puedeEditar = false }) {
         <div className="table-scroll"><table>
           <thead>
             <tr>
+              <th>N°</th>
               <th>Nombre</th>
               <th>Especialidad</th>
               <th>Teléfono</th>
@@ -135,8 +136,10 @@ export default function VeterinariosPage({ puedeEditar = false }) {
             </tr>
           </thead>
           <tbody>
-            {veterinarios.map((v) => (
+            {/* N° = posición en la lista; las acciones usan el ID real (v.id) */}
+            {veterinarios.map((v, i) => (
               <tr key={v.id}>
+                <td>{i + 1}</td>
                 <td>{v.nombre}</td>
                 <td>{v.especialidad}</td>
                 <td>{v.telefono}</td>

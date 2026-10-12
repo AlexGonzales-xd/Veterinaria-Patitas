@@ -47,14 +47,16 @@ function CampoPassword({ id, name, value, onChange, autoComplete }) {
 export default function AuthPage({ onLogin }) {
 
   const [mode, setMode] = useState("login"); // "login" | "register"
-  const [form, setForm] = useState({ username: "", email: "", password: "", confirm: "" });
+  const [form, setForm] = useState({ username: "", email: "", telefono: "", password: "", confirm: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const isRegister = mode === "register";
 
   function change(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    // El teléfono solo admite dígitos
+    setForm({ ...form, [name]: name === "telefono" ? value.replace(/\D/g, "") : value });
   }
 
   function switchMode() {
@@ -68,6 +70,7 @@ export default function AuthPage({ onLogin }) {
     if (!form.password) return "Ingresa tu contraseña.";
     if (isRegister) {
       if (!/^\S+@\S+\.\S+$/.test(form.email)) return "Ingresa un correo válido.";
+      if (!/^\d{9,11}$/.test(form.telefono)) return "Ingresa un teléfono válido (solo números, de 9 a 11 dígitos).";
       if (form.password.length < 6) return "La contraseña debe tener al menos 6 caracteres.";
       if (form.password !== form.confirm) return "Las contraseñas no coinciden.";
     }
@@ -83,7 +86,7 @@ export default function AuthPage({ onLogin }) {
     setError("");
     try {
       if (isRegister) {
-        await register(form.username.trim(), form.email.trim(), form.password);
+        await register(form.username.trim(), form.email.trim(), form.password, form.telefono);
       }
       const usuario = await login(form.username.trim(), form.password);
       onLogin(usuario);
@@ -143,6 +146,18 @@ export default function AuthPage({ onLogin }) {
                 onChange={change}
                 autoComplete="email"
                 maxLength={100}
+              />
+
+              <label htmlFor="telefono">Teléfono</label>
+              <input
+                id="telefono"
+                name="telefono"
+                type="tel"
+                inputMode="numeric"
+                value={form.telefono}
+                onChange={change}
+                autoComplete="tel"
+                maxLength={11}
               />
             </>
           )}

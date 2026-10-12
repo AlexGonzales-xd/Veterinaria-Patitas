@@ -125,16 +125,18 @@ export default function ApoderadosPage() {
         <div className="table-scroll"><table>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>N°</th>
               <th>Nombre</th>
               <th>Teléfono</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {apoderados.map((a) => (
+            {/* N° es solo la posición en la lista (1, 2, 3...), así no quedan huecos al eliminar.
+                Las acciones siguen usando el ID real (a.id). */}
+            {apoderados.map((a, i) => (
               <tr key={a.id}>
-                <td>{a.id}</td>
+                <td>{i + 1}</td>
                 <td>{a.nombre}</td>
                 <td>{a.telefono}</td>
                 <td>

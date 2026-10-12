@@ -33,8 +33,19 @@ export default function NuevaConsultaPage({ consulta, onGuardar, onCancelar }) {
       .finally(() => setCargando(false));
   }, []);
 
+  // Solo las mascotas del apoderado seleccionado
+  const mascotasDelApoderado = form.idApoderado
+    ? mascotas.filter((m) => String(m.idApoderado) === String(form.idApoderado))
+    : [];
+
   function cambiar(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "idApoderado") {
+      // Al cambiar de apoderado, la mascota elegida antes deja de ser válida
+      setForm({ ...form, idApoderado: value, idMascota: "" });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   }
 
   async function guardar(e) {
@@ -59,7 +70,15 @@ export default function NuevaConsultaPage({ consulta, onGuardar, onCancelar }) {
       {cargando && <p role="status">Cargando opciones...</p>}
       <div className="form-grid">
         <label>Fecha y hora
-          <input type="datetime-local" name="fecha" min={inicioDeHoy()} value={form.fecha} onChange={cambiar} required />
+          {/* El mínimo solo aplica al crear: así se pueden editar consultas pasadas */}
+          <input
+            type="datetime-local"
+            name="fecha"
+            min={consulta.id ? undefined : inicioDeHoy()}
+            value={form.fecha}
+            onChange={cambiar}
+            required
+          />
         </label>
         <label>Apoderado
           <select name="idApoderado" value={form.idApoderado} onChange={cambiar} required>
@@ -74,14 +93,28 @@ export default function NuevaConsultaPage({ consulta, onGuardar, onCancelar }) {
           </select>
         </label>
         <label>Mascota
-          <select name="idMascota" value={form.idMascota} onChange={cambiar} required>
-            <option value="">Seleccionar mascota</option>
-            {mascotas.map((m) => <option key={m.id} value={m.id}>{m.nombre}</option>)}
+          <select
+            name="idMascota"
+            value={form.idMascota}
+            onChange={cambiar}
+            disabled={!form.idApoderado}
+            required
+          >
+            <option value="">
+              {form.idApoderado ? "Seleccionar mascota" : "Primero elige un apoderado"}
+            </option>
+            {mascotasDelApoderado.map((m) => <option key={m.id} value={m.id}>{m.nombre}</option>)}
           </select>
+          {!cargando && form.idApoderado && mascotasDelApoderado.length === 0 && (
+            <small>Este apoderado aún no tiene mascotas registradas.</small>
+          )}
         </label>
       </div>
       <div className="form-acciones">
-        <button className="btn-primary" disabled={cargando || guardando || !apoderados.length || !veterinarios.length || !mascotas.length}>
+        <button
+          className="btn-primary"
+          disabled={cargando || guardando || !apoderados.length || !veterinarios.length || !mascotasDelApoderado.length}
+        >
           {guardando ? "Guardando..." : "Guardar consulta"}
         </button>
         <button type="button" className="btn-secondary" onClick={onCancelar} disabled={guardando}>Cancelar</button>

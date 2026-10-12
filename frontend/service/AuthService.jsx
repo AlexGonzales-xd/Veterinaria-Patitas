@@ -15,9 +15,9 @@ export async function login(username, password) {
     return user;
 }
 
-// POST /api/auth/register -> crea el usuario con rol 4 (apoderado)
-export function register(username, email, password) {
-    return post("register", { username, email, password });
+// POST /api/auth/register -> crea el usuario con rol 4 (apoderado) y su ficha con el teléfono
+export function register(username, email, password, telefono) {
+    return post("register", { username, email, password, telefono });
 }
 
 export function logout() {

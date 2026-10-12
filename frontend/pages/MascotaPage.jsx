@@ -185,6 +185,7 @@ export default function MascotasPage({ usuario, rol }) {
         <div className="table-scroll"><table>
           <thead>
             <tr>
+              <th>N°</th>
               <th>Nombre</th>
               <th>Raza</th>
               <th>Peso (kg)</th>
@@ -194,8 +195,10 @@ export default function MascotasPage({ usuario, rol }) {
             </tr>
           </thead>
           <tbody>
-            {mascotas.map((m) => (
+            {/* N° = posición en la lista; las acciones usan el ID real (m.id) */}
+            {mascotas.map((m, i) => (
               <tr key={m.id}>
+                <td>{i + 1}</td>
                 <td>{m.nombre}</td>
                 <td>{m.raza}</td>
                 <td>{m.peso}</td>

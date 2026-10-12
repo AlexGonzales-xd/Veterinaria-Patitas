@@ -51,6 +51,13 @@ public class AuthController {
                     .body(Map.of("error", "El email ya existe"));
         }
 
+        // El telefono es obligatorio: solo digitos, de 9 a 11 (la columna admite hasta 11).
+        String telefono = req.getTelefono() == null ? "" : req.getTelefono().trim();
+        if (!telefono.matches("\\d{9,11}")) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "El telefono debe tener entre 9 y 11 digitos numericos"));
+        }
+
         // El registro publico SIEMPRE crea apoderados (rol 4); se ignora cualquier id_rol enviado.
         // Los admins y veterinarios se crean directamente en la base de datos.
         int idRol = 4;
@@ -68,12 +75,12 @@ public class AuthController {
         usuario.setRol(rol);
         usuario.setEstado(true);
 
-        // Si se registra como apoderado, se crea su ficha de apoderado y se vincula al usuario.
-        // El telefono es un valor provisional (la columna es NOT NULL); el admin puede corregirlo luego.
+        // Si se registra como apoderado, se crea su ficha de apoderado con el telefono ingresado
+        // y se vincula al usuario.
         if (idRol == 4) {
             Apoderado apoderado = new Apoderado();
             apoderado.setNombre(req.getUsername());
-            apoderado.setTelefono("000000000");
+            apoderado.setTelefono(telefono);
             usuario.setApoderado(apoderadoRepository.save(apoderado));
         }
 
